@@ -3,49 +3,43 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Made with HTML/CSS/JS](https://img.shields.io/badge/Made%20with-HTML%2FCSS%2FJS-orange)](https://developer.mozilla.org/en-US/docs/Web)
 
-A powerful, browser-based corpus linguistics tool for analyzing text corpora with support for keyness analysis, concordancing, collocation extraction, and advanced grammatical pattern searches. **All processing happens locally in your browser—no data is sent to any server.**
+A powerful, browser-based corpus linguistics tool for analyzing text corpora with support for keyness analysis, concordancing, collocation extraction, and frequency analysis. **All processing happens locally in your browser—no data is sent to any server.**
 
 ## 🌟 Features Overview
 
-### Core Analysis Functions
+### Analysis Sections
 
 | Section | Feature | Description |
 |---------|---------|-------------|
-| 1 | **Data Upload** | Support for plain text, tagged corpora, and CSV/ZIP formats |
+| 1 | **Data Type & Upload** | Support for plain text, tagged corpora, and CSV/ZIP formats |
 | 2 | **Corpus Summary** | Overview of loaded files, tokens, and folder structure |
 | 3 | **Target/Reference Selection** | Assign folders to Target or Reference groups for comparative analysis |
 | 4 | **KWIC (Concordance)** | Keyword-in-Context search with advanced filtering and sorting |
 | 5 | **Dispersion Plot** | Visual distribution of search terms across texts |
 | 6 | **Collocate Analysis** | Extract collocations with multiple statistical measures |
 | 7 | **High-Frequency Features** | Compare most frequent features between Target and Reference |
-| 8 | **Keyness Analysis** | Identify statistically significant vocabulary differences |
-
-### Advanced Analysis (CSV Mode)
-
-| Section | Feature | Description |
-|---------|---------|-------------|
-| 11 | **Dependency Grammar** | Pattern search using dependency relations |
-| 12 | **Constituent (Phrase Structure)** | Pattern search using phrase structure grammar |
+| 8 | **Keyness Analysis** | Identify statistically significant vocabulary differences with Freq-LL, Text-LL, and MTK |
 
 ---
 
-## 📥 Data Input Formats
+## 📥 Section 1: Data Input Formats
 
-### 1. Plain Text Mode
+### Plain Text Mode
 - Upload `.txt` files directly
 - Supports folder uploads to preserve Move/folder structure
 - Tokenization options:
   - Treat hyphens as part of words (e.g., `state-of-the-art`)
-  - Treat apostrophes as part of words (e.g., `patient's`, `I'm`)
-- Text preprocessing: Merge short lines (useful for YouTube subtitles)
+  - Treat apostrophes as part of words (e.g., `patient's`, `I'm`, `I've`, `I'll`)
+- Text preprocessing: Merge short lines (useful for YouTube subtitles/transcripts)
 
-### 2. Tagged Corpus Mode
+### Tagged Corpus Mode
 - Format: `word_POSd_POSs_lemma` (underscore-separated)
 - Example: `chronic_kidney_disease_NN_NOUN_disease`
+- Parsed from the right as 3 elements (POSd / POSs / lemma)
 - Use [TagAnt](https://www.laurenceanthony.net/software/tagant/) for tagging
 - Auto-detect option available for mixed corpora
 
-### 3. CSV Mode (Advanced)
+### CSV Mode (Advanced)
 - Load pre-processed corpus data from CSV or ZIP files
 - Required columns: `file`, `token`
 - Optional columns:
@@ -56,9 +50,222 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
   - `chunk`, `cpath`, `cpath_norm`, `is_chunk_head` - Constituent/phrase structure
   - `tags_raw` - Biber tags for register analysis
 
+### Upload Options
+- **Folder upload**: Use `webkitdirectory` to upload entire folder structures (e.g., Move1, Move2)
+- **Multiple file upload**: Upload individual files (assigned to virtual folder "Ungrouped")
+- Hidden files (`.DS_Store`, `__MACOSX`, etc.) are automatically excluded
+
 ---
 
-## 🔍 Feature Types for Analysis
+## 📋 Section 2: Corpus Summary
+
+After loading your corpus, this section displays:
+- **Mode badge**: Plain / Tagged / CSV
+- **File count**: Total number of files loaded
+- **Token count**: Approximate token count (excluding punctuation and spaces)
+- **File list table**: Sortable by folder, filename, or token count
+
+---
+
+## 🎯 Section 3: Target/Reference Selection
+
+Assign folders (Moves) to Target and/or Reference groups for comparative analysis:
+
+- **Target**: The corpus you're analyzing (what you want to characterize)
+- **Reference**: The comparison corpus (baseline for comparison)
+- You can assign the same folder to both Target and Reference
+- Displays Token count, Type count, and TTR for each folder
+- "All" toggle buttons for quick selection
+
+---
+
+## 🔍 Section 4: KWIC (Keyword in Context)
+
+### Search Modes
+| Mode | Description | Example |
+|------|-------------|---------|
+| **Exact** | Exact word match | `study` or `cell\|cells` (pipe for alternatives) |
+| **Wildcard** | `*` = any string, `?` = single character | `*ing`, `un*`, `b?t` |
+| **Regex** | Regular expression | `stud(y\|ies\|ied)`, `[A-Z]+ing` |
+
+### Display Options
+- **Max lines**: Limit displayed concordance lines (1-5000)
+- **Left/Right words**: Context window size (1-100 words each side)
+- **Scope**: Target only / Reference only / All folders / Specific folder
+- **View**: Surface only / Tagged (word_POSd_POSs_lemma)
+
+### Filtering Options
+- **Left filter**: Filter by words in left context
+- **Node filter**: Filter by the keyword itself
+- **Right filter**: Filter by words in right context
+- **Match modes**: Exact match, Partial match, Wildcard, POS (simple/detailed), POS-gram, Biber tag
+- **Position-specific**: L1-L5, R1-R5 positions with range option
+- **Exclude option**: Exclude matches instead of including them
+
+### Sorting
+- Sort by any position (N) in left, node, or right context
+- Alphabetical order (A→Z or Z→A)
+- Sort key frequency display
+
+### Advanced Mode (Tagged Corpus)
+- Pattern format: `surface_POSd_POSs_lemma`
+- Use `*` for any value, `|` for multiple values
+- Examples:
+  - `as_IN_ADP_*` (surface=as, POSd=IN, POSs=ADP)
+  - `*_NN|NNS_NOUN_*` (POSd=NN or NNS, POSs=NOUN)
+
+### Color Scheme
+- Customizable colors for L1-L5 / Node / R1-R5 positions
+- Helps visualize context patterns
+
+---
+
+## 📊 Section 5: Dispersion Plot
+
+Visualize the distribution of search terms across your corpus:
+
+- **Vertical lines**: Indicate occurrence positions within each text
+- **Grouping**: By file or by folder
+- **Scope**: Target / Reference / All folders
+- **Options**: Hide files/folders with no hits
+- **Click interaction**: Click a bar to display KWIC for that file/folder
+- **Export**: Download as JPEG image
+
+### Advanced Mode
+- Synced with KWIC advanced pattern search
+- Same pattern matching capabilities
+
+---
+
+## 🔗 Section 6: Collocate Tables (Target vs Reference)
+
+Extract and compare collocations between Target and Reference corpora.
+
+### Input Options
+- **Node**: Word or p-frame pattern (e.g., `in the *`)
+- **Feature type**: Word, lemma, n-gram, p-frame, POS, etc.
+- **Collocate type**: Surface / Lemma / POS (simple/detailed)
+- **Window size**: Left 1-5, Right 1-5
+- **Top N**: Number of collocates to display
+
+### Statistical Measures
+| Statistic | Description |
+|-----------|-------------|
+| Frequency | Raw co-occurrence count |
+| t-score | Student's t-test statistic |
+| z-score | Standard score |
+| MI | Mutual Information |
+| MI² | MI squared |
+| MI³ | MI cubed |
+| LL (G²) | Log-likelihood ratio |
+| LogDice | Logarithmic Dice coefficient |
+| Dice | Dice coefficient |
+| Delta P | Directional association measure |
+
+### Output
+- Separate tables for Target and Reference
+- Left and Right collocate positions (L5-L1, R1-R5)
+- Sortable columns
+- Click word to filter KWIC by position (highlighted in purple)
+- Export to Excel
+
+---
+
+## 📈 Section 7: High-Frequency Features
+
+Compare the most frequent features between Target and Reference corpora.
+
+### Options
+- **Feature type**: Word, lemma, n-gram, p-frame, POS, cluster, Biber tag, etc.
+- **n value**: For n-gram, p-frame, POS-gram, cluster
+- **Min freq**: Minimum frequency threshold per side
+- **Top N**: Number of features to display
+- **Case-insensitive**: Toggle case sensitivity
+- **Exclude stopwords**: Filter out common function words
+- **96 BiberPlus only**: Limit to standard Biber features (CSV mode)
+
+### Cluster Analysis
+- Extract n-grams containing a specific search word
+- Supports wildcards: `*`, `?`, `|`
+- Position options: All / Left (start) / Right (end)
+
+### Output Columns
+| Column | Description |
+|--------|-------------|
+| # (T/R) | Rank in Target/Reference |
+| Feature | The linguistic feature |
+| freq_T / freq_R | Raw frequency |
+| norm_T / norm_R | Normalized frequency (per million) |
+| files_T / files_R | Number of files containing the feature |
+
+### Filtering
+- Feature filter with exact/partial match
+- Include/Exclude mode
+- Apply to: All / Target only / Reference only
+
+---
+
+## 📊 Section 8: Keyness Analysis
+
+Identify statistically significant vocabulary differences between Target and Reference corpora.
+
+### Options
+- **Feature type**: Full range of linguistic features
+- **n value**: For n-gram, p-frame, POS-gram, cluster
+- **Min total freq**: Minimum combined frequency
+- **Top N**: Number of features in table
+- **Case-insensitive**: Toggle case sensitivity
+- **Use MTK**: Calculate Mean Text Keyness
+- **Weighted pooled SD**: Option for MTK calculation
+- **Advanced Statistics**: Show dispersion measures
+
+### Keyness Statistics
+| Measure | Description |
+|---------|-------------|
+| **Freq-LL (T)** | Log-likelihood based on raw frequencies |
+| **Text-LL (T)** | Log-likelihood based on text/file frequencies |
+| **MTK (T)** | Mean Text Keyness (Larsson, Kim, & Egbert, 2025) |
+
+**Interpretation**: Positive values = Target dominant, Negative values = Reference dominant
+
+### MTK (Mean Text Keyness) Formula
+```
+MTK = (mean_T - mean_R) / pooled_SD
+```
+Where:
+- `mean_T` = average normalized frequency (per 1,000 words) across Target texts
+- `mean_R` = average normalized frequency across Reference texts
+- **Unweighted pooled SD**: `√((SD₁² + SD₂²) / 2)`
+- **Weighted pooled SD**: `√(((n₁-1)SD₁² + (n₂-1)SD₂²) / (n₁+n₂-2))`
+
+### Advanced Statistics (Dispersion)
+| Measure | Description | Range |
+|---------|-------------|-------|
+| Range | Proportion of files containing the feature | 0-1 |
+| Juilland's D | Dispersion coefficient | 0-1 (1 = even) |
+| Gries's DP | Deviation of proportions | 0-1 (0 = even) |
+
+### P-frame Filler Analysis
+For p-frame features (e.g., `in the *`):
+- **Fillers_T**: Distribution of words filling `*` in Target
+- **Fillers_R**: Distribution of words filling `*` in Reference
+- Click filler word to display KWIC for that specific n-gram
+
+### Output Table
+| Column | Description |
+|--------|-------------|
+| # | Rank |
+| Feature | The linguistic feature (click for KWIC) |
+| freq_T / freq_R | Raw frequency |
+| norm_T / norm_R | Normalized frequency (per million) |
+| Freq-LL (T) | Frequency-based log-likelihood |
+| Text-LL (T) | Text-based log-likelihood |
+| MTK (T) | Mean Text Keyness |
+| Fillers_T / Fillers_R | P-frame filler distribution |
+
+---
+
+## 🔍 Feature Types Reference
 
 ### Word-Level Features
 | Feature Type | Description |
@@ -79,6 +286,8 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
 | p-frame (word) | N-grams with one slot replaced by `*` |
 | p-frame (lemma) | Lemma-based p-frames |
 
+P-frame patterns for n=4: `1 * 34`, `12 * 4`, `123 *` (wildcard at any position except leftmost)
+
 ### POS-Based Features
 | Feature Type | Description |
 |--------------|-------------|
@@ -87,161 +296,21 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
 | POS-gram (simple) | POS tag sequences (simple) |
 | POS-gram (detailed) | POS tag sequences (detailed) |
 
-### Combined Features
+### Combined Features (Tagged/CSV Mode)
 | Feature Type | Description |
 |--------------|-------------|
-| Word_POS | Combined word and POS tag |
-| n-gram_POS | N-gram with POS information |
+| Word(surface)_POS(simple) | Combined surface word and simple POS |
+| Word(lemma)_POS(simple) | Combined lemma and simple POS |
+| Word(surface)_POS(detailed) | Combined surface word and detailed POS |
+| Word(lemma)_POS(detailed) | Combined lemma and detailed POS |
+| n-gram(surface)_POS(simple) | N-gram with simple POS |
+| n-gram(lemma)_POS(detailed) | N-gram lemma with detailed POS |
 
----
-
-## 📊 Statistical Measures
-
-### Keyness Statistics
-| Measure | Description |
-|---------|-------------|
-| **Freq-LL** | Log-likelihood based on raw frequencies (G² statistic) |
-| **Text-LL** | Log-likelihood based on text/file frequencies |
-| **MTK** | Mean Text Keyness (Larsson, Kim, & Egbert, 2025) |
-
-MTK Formula:
-```
-MTK = (mean_T - mean_R) / pooled_SD
-```
-Where:
-- `mean_T` = average normalized frequency (per 1,000 words) across Target texts
-- `mean_R` = average normalized frequency across Reference texts
-- `pooled_SD` = pooled standard deviation
-
-### Dispersion Measures
-| Measure | Description | Range |
-|---------|-------------|-------|
-| Range | Proportion of files containing the feature | 0-1 |
-| Juilland's D | Dispersion coefficient | 0-1 (1 = even) |
-| Gries's DP | Deviation of proportions | 0-1 (0 = even) |
-
-### Collocation Statistics
-| Statistic | Description |
-|-----------|-------------|
-| Frequency | Raw co-occurrence count |
-| t-score | Student's t-test statistic |
-| z-score | Standard score |
-| MI | Mutual Information |
-| MI² | MI squared |
-| MI³ | MI cubed |
-| LL (G²) | Log-likelihood ratio |
-| LogDice | Logarithmic Dice coefficient |
-| Dice | Dice coefficient |
-| Delta P | Directional association measure |
-
----
-
-## 🎯 KWIC (Concordance) Features
-
-### Search Modes
-- **Exact**: Exact word match (use `|` for alternatives: `cell|cells`)
-- **Wildcard**: `*` matches any string, `?` matches single character
-- **Regex**: Full regular expression support
-
-### Filtering Options
-- **Left/Right Context Filter**: Filter by words in context
-- **Node Filter**: Filter by the keyword itself
-- **POS Filter**: Filter by part-of-speech tags
-- **Biber Tag Filter**: Filter by register features (CSV mode)
-- **Position-specific Filtering**: L1-L5, R1-R5 positions
-
-### Sorting
-- Sort by any position in left/right context
-- Alphabetical (A→Z or Z→A)
-- Frequency display for sort keys
-
-### Advanced Mode (Tagged Corpus)
-- Pattern format: `surface_POSd_POSs_lemma`
-- Multi-token pattern matching
-- Example: `as_IN_ADP_* *_DT_DET_* *_NN|NNS_NOUN_*`
-
----
-
-## 🌳 Dependency Grammar Analysis (Section 11)
-
-### Pattern Search Elements
-- **Node**: Head word of the construction
-- **Modifier 1-3**: Dependent words with specific relations
-
-### Search Criteria per Element
-- Word (surface/lemma)
-- POS tag (simple/detailed)
-- Dependency relation (nsubj, dobj, amod, etc.)
-- Specific element or wildcard (`*`)
-
-### 28 Built-in Presets
-Including patterns for:
-- Subject-Verb constructions
-- Verb-Object patterns
-- Noun modifications
-- Prepositional phrases
-- Clausal complements
-- And more...
-
-### Output
-- Pattern frequency table with Target/Reference comparison
-- Concordance view with highlighted grammatical elements
-- Export to CSV/Excel
-
----
-
-## 🏗️ Constituent (Phrase Structure) Analysis (Section 12)
-
-### Pattern Elements
-- **Feature**: Target word or phrase
-- **Chunk Type**: NP, VP, PP, ADJP, ADVP, S, SBAR, etc.
-- **Depth**: Level in phrase structure tree
-- **Parent Chunk**: Containing phrase type
-- **Full Path**: Complete constituent path
-
-### Analysis Options
-- Extract all patterns matching criteria
-- Filter by frequency threshold
-- Filter by specific features or chunk types
-
-### Output
-- Pattern frequency with keyness statistics
-- Concordance with full sentence context
-- Export functionality
-
----
-
-## 📈 High-Frequency Features (Section 7)
-
-Compare the most frequent features between Target and Reference corpora:
-
-### Output Columns
-| Column | Description |
-|--------|-------------|
-| # | Rank |
-| Feature | The linguistic feature |
-| freq_T / freq_R | Raw frequency in Target/Reference |
-| norm_T / norm_R | Normalized frequency (per million) |
-| files_T / files_R | Number of files containing the feature |
-
-### Options
-- Feature type selection
-- Minimum frequency threshold
-- Top N features to display
-- Case-sensitive/insensitive
-- Stopword exclusion
-- Feature filtering (include/exclude)
-
----
-
-## 🎨 Dispersion Plot (Section 5)
-
-Visualize the distribution of search terms across your corpus:
-
-- Vertical lines indicate occurrence positions
-- Group by file or folder
-- Click bars to show KWIC for that file/folder
-- Download as JPEG
+### Special Features (CSV Mode)
+| Feature Type | Description |
+|--------------|-------------|
+| Biber tag | Register/genre feature tags |
+| DEP (deprel) | Dependency relation tags |
 
 ---
 
@@ -249,11 +318,11 @@ Visualize the distribution of search terms across your corpus:
 
 All analysis results can be exported to Excel-compatible CSV format:
 
-- KWIC concordance lines
-- Keyness results with all statistics
-- High-frequency feature lists
-- Collocate tables
-- Dependency/Constituent patterns
+- ✅ KWIC concordance lines (all rows, not just displayed)
+- ✅ Keyness results with all statistics
+- ✅ High-frequency feature lists
+- ✅ Collocate tables
+- ✅ Dispersion plots (JPEG)
 
 ---
 
@@ -261,10 +330,10 @@ All analysis results can be exported to Excel-compatible CSV format:
 
 **All data processing happens locally in your browser.**
 
-- No data is uploaded to any server
-- No internet connection required after loading the page
-- Your corpus files remain on your computer
-- Suitable for sensitive or confidential data
+- ✅ No data is uploaded to any server
+- ✅ No internet connection required after loading the page
+- ✅ Your corpus files remain on your computer
+- ✅ Suitable for sensitive or confidential data
 
 ---
 
@@ -278,13 +347,16 @@ All analysis results can be exported to Excel-compatible CSV format:
 ### Memory Considerations
 - Large corpora (>1 million tokens) may require significant browser memory
 - Consider splitting very large corpora into smaller files
+- Progress bars show loading status for large files
 
-### Hidden File Handling
-- `.DS_Store`, `__MACOSX`, and other hidden files are automatically excluded
+### File Handling
+- Hidden files (`.DS_Store`, `__MACOSX`, etc.) automatically excluded
+- Punctuation and spaces excluded from token counts
+- Sentence boundaries (`. ? !`) respected for n-grams (configurable)
 
-### Sentence Boundary Options
-- N-grams can respect sentence boundaries (`. ? !`)
-- Configurable via checkbox in upload section
+### External Dependencies
+- [JSZip](https://stuk.github.io/jszip/) - For ZIP file handling (loaded dynamically)
+- [TagAnt](https://www.laurenceanthony.net/software/tagant/) - Recommended for corpus tagging
 
 ---
 
@@ -306,40 +378,44 @@ Available at: [Your GitHub URL]
 
 ### Step 1: Upload Your Data
 1. Select data type (Plain text, Tagged, or Auto-detect)
-2. Upload files or folders
-3. Click "Load & Parse Corpus"
+2. Configure tokenization options if needed
+3. Upload files or folders using the appropriate input
+4. Click "Load & Parse Corpus"
 
-### Step 2: Review Corpus Summary
+### Step 2: Review Corpus Summary (Section 2)
 - Check file count and token count
-- Verify folder structure
+- Verify folder structure is correct
 
-### Step 3: Set Target/Reference
-- Assign folders to Target group (what you're analyzing)
-- Assign folders to Reference group (comparison corpus)
+### Step 3: Set Target/Reference (Section 3)
+- Check Target column for folders you want to analyze
+- Check Reference column for comparison folders
+- Review token/type/TTR statistics
 
 ### Step 4: Analyze
-- Use KWIC for concordance search
-- Compute keyness to find distinctive vocabulary
-- Extract collocates for word association patterns
-- Explore grammatical patterns (CSV mode)
+- **Section 4 (KWIC)**: Search for specific words or patterns
+- **Section 5 (Plot)**: Visualize distribution across texts
+- **Section 6 (Collocates)**: Find word associations
+- **Section 7 (High-Freq)**: Compare frequent features
+- **Section 8 (Keyness)**: Identify distinctive vocabulary
 
 ### Step 5: Export Results
 - Click "Export to Excel" buttons to save results
-- Use results in your research or further analysis
+- Download plots as JPEG images
+- Use results in your research
 
 ---
 
 ## ⚙️ Configuration Options
 
-### Tokenization (Plain Text)
+### Tokenization (Plain Text Mode)
 - `☑️ Treat "-" as part of word`: Keep hyphenated compounds together
 - `☑️ Treat apostrophe as part of word`: Keep contractions together
 
 ### Text Preprocessing
-- `☐ Merge short lines`: Combine subtitle-style lines into paragraphs
+- `☐ Merge short lines into paragraphs`: Combine subtitle-style lines (improves KWIC display)
 
 ### N-gram Boundaries
-- `☑️ Respect sentence boundaries`: Prevent n-grams from crossing sentence-ending punctuation
+- `☑️ Respect sentence boundaries`: Prevent n-grams from crossing `. ? !`
 
 ---
 
@@ -357,8 +433,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- TagAnt by Laurence Anthony for POS tagging support
-- JSZip library for ZIP file handling
+- [TagAnt](https://www.laurenceanthony.net/software/tagant/) by Laurence Anthony for POS tagging support
+- [JSZip](https://stuk.github.io/jszip/) library for ZIP file handling
 - The corpus linguistics community for methodology and feedback
 
 ---

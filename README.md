@@ -5,13 +5,20 @@
 
 A powerful, browser-based corpus linguistics tool for analyzing text corpora with support for keyness analysis, concordancing, collocation extraction, and frequency analysis. **All processing happens locally in your browser—no data is sent to any server.**
 
+## 🌐 Access the Tool
+
+- **Web Application**: [https://sites.google.com/view/ishitatu-web-based-corpus-tool](https://sites.google.com/view/ishitatu-web-based-corpus-tool/%E3%83%9B%E3%83%BC%E3%83%A0?authuser=4)
+- **Download**: You can also download the HTML file from this repository and run it locally in your browser
+
+---
+
 ## 🌟 Features Overview
 
 ### Analysis Sections
 
 | Section | Feature | Description |
 |---------|---------|-------------|
-| 1 | **Data Type & Upload** | Support for plain text, tagged corpora, and CSV/ZIP formats |
+| 1 | **Data Type & Upload** | Support for plain text and tagged corpora |
 | 2 | **Corpus Summary** | Overview of loaded files, tokens, and folder structure |
 | 3 | **Target/Reference Selection** | Assign folders to Target or Reference groups for comparative analysis |
 | 4 | **KWIC (Concordance)** | Keyword-in-Context search with advanced filtering and sorting |
@@ -39,17 +46,6 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
 - Use [TagAnt](https://www.laurenceanthony.net/software/tagant/) for tagging
 - Auto-detect option available for mixed corpora
 
-### CSV Mode (Advanced)
-- Load pre-processed corpus data from CSV or ZIP files
-- Required columns: `file`, `token`
-- Optional columns:
-  - `move` - Folder/Move classification
-  - `sent_id`, `sent_text` - Sentence information
-  - `lemma`, `pos`, `xpos` - Morphological information
-  - `dep`, `head_id`, `head_text`, `head_lemma`, `head_pos` - Dependency grammar
-  - `chunk`, `cpath`, `cpath_norm`, `is_chunk_head` - Constituent/phrase structure
-  - `tags_raw` - Biber tags for register analysis
-
 ### Upload Options
 - **Folder upload**: Use `webkitdirectory` to upload entire folder structures (e.g., Move1, Move2)
 - **Multiple file upload**: Upload individual files (assigned to virtual folder "Ungrouped")
@@ -60,7 +56,7 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
 ## 📋 Section 2: Corpus Summary
 
 After loading your corpus, this section displays:
-- **Mode badge**: Plain / Tagged / CSV
+- **Mode badge**: Plain / Tagged
 - **File count**: Total number of files loaded
 - **Token count**: Approximate token count (excluding punctuation and spaces)
 - **File list table**: Sortable by folder, filename, or token count
@@ -98,7 +94,7 @@ Assign folders (Moves) to Target and/or Reference groups for comparative analysi
 - **Left filter**: Filter by words in left context
 - **Node filter**: Filter by the keyword itself
 - **Right filter**: Filter by words in right context
-- **Match modes**: Exact match, Partial match, Wildcard, POS (simple/detailed), POS-gram, Biber tag
+- **Match modes**: Exact match, Partial match, Wildcard, POS (simple/detailed), POS-gram
 - **Position-specific**: L1-L5, R1-R5 positions with range option
 - **Exclude option**: Exclude matches instead of including them
 
@@ -144,7 +140,7 @@ Extract and compare collocations between Target and Reference corpora.
 ### Input Options
 - **Node**: Word or p-frame pattern (e.g., `in the *`)
 - **Feature type**: Word, lemma, n-gram, p-frame, POS, etc.
-- **Collocate type**: Surface / Lemma / POS (simple/detailed)
+- **Collocate type**: Surface / Lemma / POS (simple/detailed) [Tagged mode]
 - **Window size**: Left 1-5, Right 1-5
 - **Top N**: Number of collocates to display
 
@@ -176,13 +172,12 @@ Extract and compare collocations between Target and Reference corpora.
 Compare the most frequent features between Target and Reference corpora.
 
 ### Options
-- **Feature type**: Word, lemma, n-gram, p-frame, POS, cluster, Biber tag, etc.
+- **Feature type**: Word, lemma, n-gram, p-frame, POS, cluster, etc.
 - **n value**: For n-gram, p-frame, POS-gram, cluster
 - **Min freq**: Minimum frequency threshold per side
 - **Top N**: Number of features to display
 - **Case-insensitive**: Toggle case sensitivity
 - **Exclude stopwords**: Filter out common function words
-- **96 BiberPlus only**: Limit to standard Biber features (CSV mode)
 
 ### Cluster Analysis
 - Extract n-grams containing a specific search word
@@ -267,50 +262,29 @@ For p-frame features (e.g., `in the *`):
 
 ## 🔍 Feature Types Reference
 
-### Word-Level Features
+### Plain Text Mode
 | Feature Type | Description |
 |--------------|-------------|
 | Word (surface) | Raw word forms as they appear |
-| Word (lemma) | Dictionary/base forms |
-
-### N-gram Features
-| Feature Type | Description |
-|--------------|-------------|
 | n-gram (word) | Contiguous word sequences |
-| n-gram (lemma) | Contiguous lemma sequences |
-| Cluster | N-grams containing a specific search word |
-
-### P-frame (Phraseological Framework)
-| Feature Type | Description |
-|--------------|-------------|
 | p-frame (word) | N-grams with one slot replaced by `*` |
-| p-frame (lemma) | Lemma-based p-frames |
+| Cluster (word) | N-grams containing a specific search word |
+| Regex | Regular expression pattern |
 
-P-frame patterns for n=4: `1 * 34`, `12 * 4`, `123 *` (wildcard at any position except leftmost)
-
-### POS-Based Features
+### Tagged Mode (Additional Features)
 | Feature Type | Description |
 |--------------|-------------|
+| Word (lemma) | Dictionary/base forms |
+| n-gram (lemma) | Contiguous lemma sequences |
+| p-frame (lemma) | Lemma-based p-frames |
+| Cluster (lemma) | Lemma-based clusters |
 | POS (simple) | Simple POS tags (NOUN, VERB, ADJ, etc.) |
 | POS (detailed) | Detailed POS tags (NN, NNS, VB, VBD, etc.) |
 | POS-gram (simple) | POS tag sequences (simple) |
 | POS-gram (detailed) | POS tag sequences (detailed) |
 
-### Combined Features (Tagged/CSV Mode)
-| Feature Type | Description |
-|--------------|-------------|
-| Word(surface)_POS(simple) | Combined surface word and simple POS |
-| Word(lemma)_POS(simple) | Combined lemma and simple POS |
-| Word(surface)_POS(detailed) | Combined surface word and detailed POS |
-| Word(lemma)_POS(detailed) | Combined lemma and detailed POS |
-| n-gram(surface)_POS(simple) | N-gram with simple POS |
-| n-gram(lemma)_POS(detailed) | N-gram lemma with detailed POS |
-
-### Special Features (CSV Mode)
-| Feature Type | Description |
-|--------------|-------------|
-| Biber tag | Register/genre feature tags |
-| DEP (deprel) | Dependency relation tags |
+### P-frame Pattern Examples
+For n=4: `1 * 34`, `12 * 4`, `123 *` (wildcard at any position except leftmost)
 
 ---
 
@@ -354,10 +328,6 @@ All analysis results can be exported to Excel-compatible CSV format:
 - Punctuation and spaces excluded from token counts
 - Sentence boundaries (`. ? !`) respected for n-grams (configurable)
 
-### External Dependencies
-- [JSZip](https://stuk.github.io/jszip/) - For ZIP file handling (loaded dynamically)
-- [TagAnt](https://www.laurenceanthony.net/software/tagant/) - Recommended for corpus tagging
-
 ---
 
 ## 📚 References
@@ -369,7 +339,7 @@ All analysis results can be exported to Excel-compatible CSV format:
 If you use WBCA in your research, please cite:
 ```
 Web-Based Corpus Analyzer (WBCA). [Software]. 
-Available at: [Your GitHub URL]
+Available at: https://sites.google.com/view/ishitatu-web-based-corpus-tool
 ```
 
 ---
@@ -434,7 +404,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🙏 Acknowledgments
 
 - [TagAnt](https://www.laurenceanthony.net/software/tagant/) by Laurence Anthony for POS tagging support
-- [JSZip](https://stuk.github.io/jszip/) library for ZIP file handling
 - The corpus linguistics community for methodology and feedback
 
 ---

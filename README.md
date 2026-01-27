@@ -333,7 +333,7 @@ All analysis results can be exported to Excel-compatible CSV format:
 ## 📚 References
 
 ### Mean Text Keyness (MTK)
-> Larsson, T., Kim, T., & Egbert, J. (2025). Mean Text Keyness: A statistical approach to keyness that accounts for variability across texts.
+> Larsson, T., Kim, T., & Egbert, J. (2025). Introducing and comparing two techniques for key lexical bundles analysis. Research Methods in Applied Linguistics, 4(3), Article 100245. https://doi.org/10.1016/j.rmal.2025.100245
 
 ### Suggested Citation
 If you use WBCA in your research, please cite:

@@ -23,7 +23,6 @@ A powerful, browser-based corpus linguistics tool for analyzing text corpora wit
 | 3 | **Target/Reference Selection** | Assign folders to Target or Reference groups for comparative analysis |
 | 4 | **KWIC (Concordance)** | Keyword-in-Context search with advanced filtering and sorting |
 | 5 | **Text Data** | Original text and visual distribution of search terms across texts or folders|
-t** | Visual distribution of search terms across texts |
 | 6 | **Collocate Analysis** | Extract collocations with multiple statistical measures |
 | 7 | **High-Frequency Features** | Compare most frequent features between Target and Reference |
 | 8 | **Keyness Analysis** | Identify statistically significant vocabulary differences with Freq-LL, Text-LL, and MTK |

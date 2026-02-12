@@ -1010,7 +1010,6 @@
           <option value="pos_detailed">POS (detailed)</option>
           <option value="posgram_simple">POS-gram (simple)</option>
           <option value="posgram_detailed">POS-gram (detailed)</option>
-          <option value="biber_tag">Biber tag</option>
         </select>
       </label>
       <label class="text-xs mr-1">
@@ -1046,7 +1045,6 @@
           <option value="pos_detailed">POS (detailed)</option>
           <option value="posgram_simple">POS-gram (simple)</option>
           <option value="posgram_detailed">POS-gram (detailed)</option>
-          <option value="biber_tag">Biber tag</option>
         </select>
       </label>
       <label class="text-xs mr-2" title="Exclude matches instead of include" style="color:#dc2626;">
@@ -1068,7 +1066,6 @@
           <option value="pos_detailed">POS (detailed)</option>
           <option value="posgram_simple">POS-gram (simple)</option>
           <option value="posgram_detailed">POS-gram (detailed)</option>
-          <option value="biber_tag">Biber tag</option>
         </select>
       </label>
       <label class="text-xs mr-1">
@@ -1599,6 +1596,7 @@
       For p-frames (e.g., 4 words), patterns like <code>1 * 34</code>, <code>12 * 4</code>, <code>123 *</code> are generated with <code>*</code> at any position except the leftmost (same for other n).<br>
       The distribution of words filling <code>*</code> is shown separately for Target / Reference. Tokens with only punctuation or SPACE are excluded from all counts (same for POS).<br>
       <strong>Freq-LL (T) / Text-LL (T) / MTK (T)</strong> are Target-perspective values (positive=Target dominant, negative=Reference dominant). Click Feature to show Target KWIC.<br>
+      <strong>file_T / file_R</strong>: Number of files (texts) containing the feature in Target / Reference. Used as input for Text-LL calculation.<br>
       <strong>Fillers_T / Fillers_R</strong>: Click word(frequency) to display KWIC for n-gram containing that word (Target / Reference only).<br>
       <strong>Use MTK</strong>: When checked, uses Mean Text Keyness based on Larsson, T., Kim, T., &amp; Egbert, J. (2025). Calculated as (mean_T - mean_R) / pooled_SD, where mean is the average normalized frequency (per 1000 words) across texts. When unchecked, MTK column is not calculated (faster). Unweighted: SD_pooled = √((SD₁² + SD₂²) / 2); Weighted: SD_pooled = √(((n₁-1)SD₁² + (n₂-1)SD₂²) / (n₁+n₂-2)).<br>
       <strong>Advanced Statistics</strong>: When checked, dispersion measures (Range, Juilland's D, Gries's DP) are displayed. Range=proportion of files containing the feature, Juilland's D (1=even), DP (0=even).<br>
@@ -1612,13 +1610,15 @@
           <col data-col="1" style="width:200px">
           <col data-col="2" style="width:70px">
           <col data-col="3" style="width:90px">
-          <col data-col="4" style="width:70px">
-          <col data-col="5" style="width:90px">
-          <col data-col="6" style="width:70px">
-          <col data-col="7" style="width:70px">
+          <col data-col="4" style="width:55px">
+          <col data-col="5" style="width:70px">
+          <col data-col="6" style="width:90px">
+          <col data-col="7" style="width:55px">
           <col data-col="8" style="width:70px">
-          <col data-col="9" style="width:150px">
-          <col data-col="10" style="width:150px">
+          <col data-col="9" style="width:70px">
+          <col data-col="10" style="width:70px">
+          <col data-col="11" style="width:150px">
+          <col data-col="12" style="width:150px">
         </colgroup>
         <thead id="keyTableHead">
         <tr>
@@ -1626,17 +1626,19 @@
           <th class="sortable" data-col="1" style="position:relative;">Feature<div class="key-col-resizer" data-col="1"></div></th>
           <th class="text-right sortable" data-col="2" style="position:relative;">freq_T<div class="key-col-resizer" data-col="2"></div></th>
           <th class="text-right sortable" data-col="3" style="position:relative;">norm_T (pm)<div class="key-col-resizer" data-col="3"></div></th>
-          <th class="text-right sortable" data-col="4" style="position:relative;">freq_R<div class="key-col-resizer" data-col="4"></div></th>
-          <th class="text-right sortable" data-col="5" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="5"></div></th>
-          <th class="text-right sortable" data-col="6" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="6"></div></th>
-          <th class="text-right sortable" data-col="7" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="7"></div></th>
-          <th class="text-right sortable" data-col="8" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="8"></div></th>
-          <th style="position:relative;">Fillers_T (for *)<div class="key-col-resizer" data-col="9"></div></th>
-          <th style="position:relative;">Fillers_R (for *)<div class="key-col-resizer" data-col="10"></div></th>
+          <th class="text-right sortable" data-col="4" style="position:relative;">file_T<div class="key-col-resizer" data-col="4"></div></th>
+          <th class="text-right sortable" data-col="5" style="position:relative;">freq_R<div class="key-col-resizer" data-col="5"></div></th>
+          <th class="text-right sortable" data-col="6" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="6"></div></th>
+          <th class="text-right sortable" data-col="7" style="position:relative;">file_R<div class="key-col-resizer" data-col="7"></div></th>
+          <th class="text-right sortable" data-col="8" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="8"></div></th>
+          <th class="text-right sortable" data-col="9" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="9"></div></th>
+          <th class="text-right sortable" data-col="10" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="10"></div></th>
+          <th style="position:relative;">Fillers_T (for *)<div class="key-col-resizer" data-col="11"></div></th>
+          <th style="position:relative;">Fillers_R (for *)<div class="key-col-resizer" data-col="12"></div></th>
         </tr>
         </thead>
         <tbody id="keyTableBody">
-        <tr><td colspan="11" class="text-xs">No keyness results.</td></tr>
+        <tr><td colspan="13" class="text-xs">No keyness results.</td></tr>
         </tbody>
       </table>
     </div>
@@ -1680,7 +1682,7 @@ let lastHfFeatureType = 'word';
 
 let lastTargetFillers = null;
 let lastReferenceFillers = null;
-let lastSort = { col: 6, dir: 'desc' };
+let lastSort = { col: 8, dir: 'desc' };
 let lastKeyFeatureType = null;
 let lastKeyAllCount = 0;  // 8) Keyness: total rows before filter
 let lastKeyAdvancedStats = false;  // Track if advanced stats are shown
@@ -4053,7 +4055,7 @@ function applyKeynessFilter() {
 
   if (!allKeynessRows || allKeynessRows.length === 0) {
     if (keyBody) {
-      keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+      keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     }
     if (keyStatus) {
       keyStatus.textContent = 'Please run Compute Keyness / Frequency first.';
@@ -4139,7 +4141,7 @@ function applyKeynessFilter() {
 
   if (!lastKeynessRows || lastKeynessRows.length === 0) {
     if (keyBody) {
-      keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results (filter).</td></tr>';
+      keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results (filter).</td></tr>';
     }
     if (keyStatus) {
       keyStatus.textContent = `Features: ${lastKeyAllCount} (after filter: 0)`;
@@ -4171,61 +4173,67 @@ function updateKeynessTableStructure(advancedStats) {
   const thead = document.getElementById('keyTableHead');
   
   if (advancedStats) {
-    // Advanced mode: 17 columns with dispersion
+    // Advanced mode: 19 columns with file_T/file_R and dispersion
+    colgroup.innerHTML = `
+      <col data-col="0" style="width:40px">
+      <col data-col="1" style="width:180px">
+      <col data-col="2" style="width:60px">
+      <col data-col="3" style="width:80px">
+      <col data-col="4" style="width:50px">
+      <col data-col="5" style="width:55px">
+      <col data-col="6" style="width:55px">
+      <col data-col="7" style="width:55px">
+      <col data-col="8" style="width:60px">
+      <col data-col="9" style="width:80px">
+      <col data-col="10" style="width:50px">
+      <col data-col="11" style="width:55px">
+      <col data-col="12" style="width:55px">
+      <col data-col="13" style="width:55px">
+      <col data-col="14" style="width:65px">
+      <col data-col="15" style="width:65px">
+      <col data-col="16" style="width:65px">
+      <col data-col="17" style="width:140px">
+      <col data-col="18" style="width:140px">
+    `;
+    thead.innerHTML = `
+      <tr>
+        <th style="position:relative;">#<div class="key-col-resizer" data-col="0"></div></th>
+        <th class="sortable" data-col="1" style="position:relative;">Feature<div class="key-col-resizer" data-col="1"></div></th>
+        <th class="text-right sortable" data-col="2" style="position:relative;">freq_T<div class="key-col-resizer" data-col="2"></div></th>
+        <th class="text-right sortable" data-col="3" style="position:relative;">norm_T (pm)<div class="key-col-resizer" data-col="3"></div></th>
+        <th class="text-right sortable" data-col="4" style="position:relative;">file_T<div class="key-col-resizer" data-col="4"></div></th>
+        <th class="text-right sortable" data-col="5" style="position:relative;">Range_T<div class="key-col-resizer" data-col="5"></div></th>
+        <th class="text-right sortable" data-col="6" style="position:relative;">Juilland_T<div class="key-col-resizer" data-col="6"></div></th>
+        <th class="text-right sortable" data-col="7" style="position:relative;">DP_T<div class="key-col-resizer" data-col="7"></div></th>
+        <th class="text-right sortable" data-col="8" style="position:relative;">freq_R<div class="key-col-resizer" data-col="8"></div></th>
+        <th class="text-right sortable" data-col="9" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="9"></div></th>
+        <th class="text-right sortable" data-col="10" style="position:relative;">file_R<div class="key-col-resizer" data-col="10"></div></th>
+        <th class="text-right sortable" data-col="11" style="position:relative;">Range_R<div class="key-col-resizer" data-col="11"></div></th>
+        <th class="text-right sortable" data-col="12" style="position:relative;">Juilland_R<div class="key-col-resizer" data-col="12"></div></th>
+        <th class="text-right sortable" data-col="13" style="position:relative;">DP_R<div class="key-col-resizer" data-col="13"></div></th>
+        <th class="text-right sortable" data-col="14" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="14"></div></th>
+        <th class="text-right sortable" data-col="15" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="15"></div></th>
+        <th class="text-right sortable" data-col="16" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="16"></div></th>
+        <th style="position:relative;">Fillers_T<div class="key-col-resizer" data-col="17"></div></th>
+        <th style="position:relative;">Fillers_R<div class="key-col-resizer" data-col="18"></div></th>
+      </tr>
+    `;
+  } else {
+    // Basic mode: 13 columns with file_T/file_R
     colgroup.innerHTML = `
       <col data-col="0" style="width:40px">
       <col data-col="1" style="width:180px">
       <col data-col="2" style="width:60px">
       <col data-col="3" style="width:80px">
       <col data-col="4" style="width:55px">
-      <col data-col="5" style="width:55px">
-      <col data-col="6" style="width:55px">
-      <col data-col="7" style="width:60px">
-      <col data-col="8" style="width:80px">
-      <col data-col="9" style="width:55px">
-      <col data-col="10" style="width:55px">
-      <col data-col="11" style="width:55px">
-      <col data-col="12" style="width:65px">
-      <col data-col="13" style="width:65px">
-      <col data-col="14" style="width:65px">
-      <col data-col="15" style="width:140px">
-      <col data-col="16" style="width:140px">
-    `;
-    thead.innerHTML = `
-      <tr>
-        <th style="position:relative;">#<div class="key-col-resizer" data-col="0"></div></th>
-        <th class="sortable" data-col="1" style="position:relative;">Feature<div class="key-col-resizer" data-col="1"></div></th>
-        <th class="text-right sortable" data-col="2" style="position:relative;">freq_T<div class="key-col-resizer" data-col="2"></div></th>
-        <th class="text-right sortable" data-col="3" style="position:relative;">norm_T (pm)<div class="key-col-resizer" data-col="3"></div></th>
-        <th class="text-right sortable" data-col="4" style="position:relative;">Range_T<div class="key-col-resizer" data-col="4"></div></th>
-        <th class="text-right sortable" data-col="5" style="position:relative;">Juilland_T<div class="key-col-resizer" data-col="5"></div></th>
-        <th class="text-right sortable" data-col="6" style="position:relative;">DP_T<div class="key-col-resizer" data-col="6"></div></th>
-        <th class="text-right sortable" data-col="7" style="position:relative;">freq_R<div class="key-col-resizer" data-col="7"></div></th>
-        <th class="text-right sortable" data-col="8" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="8"></div></th>
-        <th class="text-right sortable" data-col="9" style="position:relative;">Range_R<div class="key-col-resizer" data-col="9"></div></th>
-        <th class="text-right sortable" data-col="10" style="position:relative;">Juilland_R<div class="key-col-resizer" data-col="10"></div></th>
-        <th class="text-right sortable" data-col="11" style="position:relative;">DP_R<div class="key-col-resizer" data-col="11"></div></th>
-        <th class="text-right sortable" data-col="12" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="12"></div></th>
-        <th class="text-right sortable" data-col="13" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="13"></div></th>
-        <th class="text-right sortable" data-col="14" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="14"></div></th>
-        <th style="position:relative;">Fillers_T<div class="key-col-resizer" data-col="15"></div></th>
-        <th style="position:relative;">Fillers_R<div class="key-col-resizer" data-col="16"></div></th>
-      </tr>
-    `;
-  } else {
-    // Basic mode: 11 columns
-    colgroup.innerHTML = `
-      <col data-col="0" style="width:40px">
-      <col data-col="1" style="width:180px">
-      <col data-col="2" style="width:60px">
-      <col data-col="3" style="width:80px">
-      <col data-col="4" style="width:60px">
-      <col data-col="5" style="width:80px">
-      <col data-col="6" style="width:65px">
-      <col data-col="7" style="width:65px">
+      <col data-col="5" style="width:60px">
+      <col data-col="6" style="width:80px">
+      <col data-col="7" style="width:55px">
       <col data-col="8" style="width:65px">
-      <col data-col="9" style="width:150px">
-      <col data-col="10" style="width:150px">
+      <col data-col="9" style="width:65px">
+      <col data-col="10" style="width:65px">
+      <col data-col="11" style="width:150px">
+      <col data-col="12" style="width:150px">
     `;
     thead.innerHTML = `
       <tr>
@@ -4233,13 +4241,15 @@ function updateKeynessTableStructure(advancedStats) {
         <th class="sortable" data-col="1" style="position:relative;">Feature<div class="key-col-resizer" data-col="1"></div></th>
         <th class="text-right sortable" data-col="2" style="position:relative;">freq_T<div class="key-col-resizer" data-col="2"></div></th>
         <th class="text-right sortable" data-col="3" style="position:relative;">norm_T (pm)<div class="key-col-resizer" data-col="3"></div></th>
-        <th class="text-right sortable" data-col="4" style="position:relative;">freq_R<div class="key-col-resizer" data-col="4"></div></th>
-        <th class="text-right sortable" data-col="5" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="5"></div></th>
-        <th class="text-right sortable" data-col="6" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="6"></div></th>
-        <th class="text-right sortable" data-col="7" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="7"></div></th>
-        <th class="text-right sortable" data-col="8" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="8"></div></th>
-        <th style="position:relative;">Fillers_T (for *)<div class="key-col-resizer" data-col="9"></div></th>
-        <th style="position:relative;">Fillers_R (for *)<div class="key-col-resizer" data-col="10"></div></th>
+        <th class="text-right sortable" data-col="4" style="position:relative;">file_T<div class="key-col-resizer" data-col="4"></div></th>
+        <th class="text-right sortable" data-col="5" style="position:relative;">freq_R<div class="key-col-resizer" data-col="5"></div></th>
+        <th class="text-right sortable" data-col="6" style="position:relative;">norm_R (pm)<div class="key-col-resizer" data-col="6"></div></th>
+        <th class="text-right sortable" data-col="7" style="position:relative;">file_R<div class="key-col-resizer" data-col="7"></div></th>
+        <th class="text-right sortable" data-col="8" style="position:relative;">Freq-LL (T)<div class="key-col-resizer" data-col="8"></div></th>
+        <th class="text-right sortable" data-col="9" style="position:relative;">Text-LL (T)<div class="key-col-resizer" data-col="9"></div></th>
+        <th class="text-right sortable" data-col="10" style="position:relative;">MTK (T)<div class="key-col-resizer" data-col="10"></div></th>
+        <th style="position:relative;">Fillers_T (for *)<div class="key-col-resizer" data-col="11"></div></th>
+        <th style="position:relative;">Fillers_R (for *)<div class="key-col-resizer" data-col="12"></div></th>
       </tr>
     `;
   }
@@ -4266,7 +4276,7 @@ function renderKeynessRows() {
   // Update table structure based on advanced stats mode
   updateKeynessTableStructure(advancedStats);
   
-  const numCols = advancedStats ? 17 : 11;
+  const numCols = advancedStats ? 19 : 13;
   
   if (!lastKeynessRows || lastKeynessRows.length === 0) {
     keyBody.innerHTML = `<tr><td colspan="${numCols}" class="text-xs">No keyness results.</td></tr>`;
@@ -4280,35 +4290,39 @@ function renderKeynessRows() {
   lastKeynessRows.sort((a, b) => {
     let va, vb;
     if (advancedStats) {
-      // Advanced mode column mapping
+      // Advanced mode column mapping (19 cols)
       switch (colIndex) {
         case 1: va = a.feature.toLowerCase(); vb = b.feature.toLowerCase(); return va.localeCompare(vb) * factor;
         case 2: va = a.fT; vb = b.fT; return (va - vb) * factor;
         case 3: va = a.normT; vb = b.normT; return (va - vb) * factor;
-        case 4: va = a.rangeT || 0; vb = b.rangeT || 0; return (va - vb) * factor;
-        case 5: va = a.juillandT || 0; vb = b.juillandT || 0; return (va - vb) * factor;
-        case 6: va = a.dpT || 0; vb = b.dpT || 0; return (va - vb) * factor;
-        case 7: va = a.fR; vb = b.fR; return (va - vb) * factor;
-        case 8: va = a.normR; vb = b.normR; return (va - vb) * factor;
-        case 9: va = a.rangeR || 0; vb = b.rangeR || 0; return (va - vb) * factor;
-        case 10: va = a.juillandR || 0; vb = b.juillandR || 0; return (va - vb) * factor;
-        case 11: va = a.dpR || 0; vb = b.dpR || 0; return (va - vb) * factor;
-        case 12: va = a.freqLL || 0; vb = b.freqLL || 0; return (va - vb) * factor;
-        case 13: va = a.textLL || 0; vb = b.textLL || 0; return (va - vb) * factor;
-        case 14: va = a.d || 0; vb = b.d || 0; return (va - vb) * factor;
+        case 4: va = a.fFileT || 0; vb = b.fFileT || 0; return (va - vb) * factor;
+        case 5: va = a.rangeT || 0; vb = b.rangeT || 0; return (va - vb) * factor;
+        case 6: va = a.juillandT || 0; vb = b.juillandT || 0; return (va - vb) * factor;
+        case 7: va = a.dpT || 0; vb = b.dpT || 0; return (va - vb) * factor;
+        case 8: va = a.fR; vb = b.fR; return (va - vb) * factor;
+        case 9: va = a.normR; vb = b.normR; return (va - vb) * factor;
+        case 10: va = a.fFileR || 0; vb = b.fFileR || 0; return (va - vb) * factor;
+        case 11: va = a.rangeR || 0; vb = b.rangeR || 0; return (va - vb) * factor;
+        case 12: va = a.juillandR || 0; vb = b.juillandR || 0; return (va - vb) * factor;
+        case 13: va = a.dpR || 0; vb = b.dpR || 0; return (va - vb) * factor;
+        case 14: va = a.freqLL || 0; vb = b.freqLL || 0; return (va - vb) * factor;
+        case 15: va = a.textLL || 0; vb = b.textLL || 0; return (va - vb) * factor;
+        case 16: va = a.d || 0; vb = b.d || 0; return (va - vb) * factor;
         default: return 0;
       }
     } else {
-      // Basic mode column mapping
+      // Basic mode column mapping (13 cols)
       switch (colIndex) {
         case 1: va = a.feature.toLowerCase(); vb = b.feature.toLowerCase(); return va.localeCompare(vb) * factor;
         case 2: va = a.fT; vb = b.fT; return (va - vb) * factor;
         case 3: va = a.normT; vb = b.normT; return (va - vb) * factor;
-        case 4: va = a.fR; vb = b.fR; return (va - vb) * factor;
-        case 5: va = a.normR; vb = b.normR; return (va - vb) * factor;
-        case 6: va = a.freqLL || 0; vb = b.freqLL || 0; return (va - vb) * factor;
-        case 7: va = a.textLL || 0; vb = b.textLL || 0; return (va - vb) * factor;
-        case 8: va = a.d || 0; vb = b.d || 0; return (va - vb) * factor;
+        case 4: va = a.fFileT || 0; vb = b.fFileT || 0; return (va - vb) * factor;
+        case 5: va = a.fR; vb = b.fR; return (va - vb) * factor;
+        case 6: va = a.normR; vb = b.normR; return (va - vb) * factor;
+        case 7: va = a.fFileR || 0; vb = b.fFileR || 0; return (va - vb) * factor;
+        case 8: va = a.freqLL || 0; vb = b.freqLL || 0; return (va - vb) * factor;
+        case 9: va = a.textLL || 0; vb = b.textLL || 0; return (va - vb) * factor;
+        case 10: va = a.d || 0; vb = b.d || 0; return (va - vb) * factor;
         default: return 0;
       }
     }
@@ -4339,11 +4353,13 @@ function renderKeynessRows() {
         <td class="mono">${escapeHtml(r.feature)}</td>
         <td class="text-right">${r.fT}</td>
         <td class="text-right">${formatNumber(r.normT, 2)}</td>
+        <td class="text-right">${r.fFileT || 0}</td>
         <td class="text-right">${rangeTStr}</td>
         <td class="text-right">${juillandTStr}</td>
         <td class="text-right">${dpTStr}</td>
         <td class="text-right">${r.fR}</td>
         <td class="text-right">${formatNumber(r.normR, 2)}</td>
+        <td class="text-right">${r.fFileR || 0}</td>
         <td class="text-right">${rangeRStr}</td>
         <td class="text-right">${juillandRStr}</td>
         <td class="text-right">${dpRStr}</td>
@@ -4359,8 +4375,10 @@ function renderKeynessRows() {
         <td class="mono">${escapeHtml(r.feature)}</td>
         <td class="text-right">${r.fT}</td>
         <td class="text-right">${formatNumber(r.normT, 2)}</td>
+        <td class="text-right">${r.fFileT || 0}</td>
         <td class="text-right">${r.fR}</td>
         <td class="text-right">${formatNumber(r.normR, 2)}</td>
+        <td class="text-right">${r.fFileR || 0}</td>
         <td class="text-right">${freqLLStr}</td>
         <td class="text-right">${textLLStr}</td>
         <td class="text-right">${dStr}</td>
@@ -4372,8 +4390,8 @@ function renderKeynessRows() {
   keyBody.innerHTML = htmlRows;
 
   // Filler columns are at different positions based on mode
-  const fillerColStart = advancedStats ? 15 : 9;
-  const fillerColEnd = advancedStats ? 16 : 10;
+  const fillerColStart = advancedStats ? 17 : 11;
+  const fillerColEnd = advancedStats ? 18 : 12;
 
   // Add click handlers for rows (excluding filler clicks)
   const rowsEl = keyBody.querySelectorAll('tr');
@@ -4568,7 +4586,7 @@ async function computeKeyness() {
 
   if (!corpus || Object.keys(corpus.files).length === 0) {
     keyStatus.textContent = 'Please load a corpus first.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
@@ -4577,7 +4595,7 @@ async function computeKeyness() {
 
   if (!hasTarget && !hasRef) {
     keyStatus.textContent = 'Please select at least one folder for Target or Reference.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
@@ -4593,14 +4611,14 @@ async function computeKeyness() {
 
   if ((featureType.startsWith('pos') || featureType.startsWith('posgram') || featureType.startsWith('wordpos') || featureType.startsWith('ngrampos')) && corpus.mode !== 'tagged' && corpus.mode !== 'csv' && corpus.mode !== 'csv') {
     keyStatus.textContent = 'POS-based features are only available in Tagged or CSV mode.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
   // Biber tag validation
   if (featureType === 'biber_tag' && corpus.mode !== 'csv') {
     keyStatus.textContent = 'Biber tag features are only available in CSV mode with Biber tags.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
@@ -4608,7 +4626,7 @@ async function computeKeyness() {
   if (featureType === 'dep') {
     if (!depHasDependencyData) {
       keyStatus.textContent = 'Dependency Grammar features require CSV mode with dependency data (head, deprel columns).';
-      keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+      keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
       return;
     }
     
@@ -4619,7 +4637,7 @@ async function computeKeyness() {
 
   if ((featureType.startsWith('ngram') || featureType.startsWith('pframe') || featureType.startsWith('posgram') || featureType.startsWith('cluster') || featureType.startsWith('ngrampos')) && n < 2) {
     keyStatus.textContent = 'For n-gram / p-frame / POS-gram / cluster / n-gram+POS, please set n to 2 or higher.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
@@ -4631,7 +4649,7 @@ async function computeKeyness() {
     
     if (!searchWord) {
       keyStatus.textContent = 'For Cluster, please enter a Search word.';
-      keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+      keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
       return;
     }
     
@@ -4694,7 +4712,7 @@ async function computeKeyness() {
 
   if ((!hasTarget || NT === 0) && (!hasRef || NR === 0)) {
     keyStatus.textContent = 'No valid units on the selected side (check folder and mode settings).';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     return;
   }
 
@@ -4785,6 +4803,8 @@ async function computeKeyness() {
       feature: feat,
       fT,
       fR,
+      fFileT: targetFileFreqs[feat] || 0,
+      fFileR: referenceFileFreqs[feat] || 0,
       normT,
       normR,
       rangeT: dispT ? dispT.range : null,
@@ -4801,7 +4821,7 @@ async function computeKeyness() {
 
   if (rows.length === 0) {
     keyStatus.textContent = 'No features found above the specified Min total freq.';
-    keyBody.innerHTML = '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    keyBody.innerHTML = '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
     hideKeynessProgress();
     return;
   }
@@ -4825,9 +4845,9 @@ async function computeKeyness() {
   lastKeynessIsPframe = isPframe;
   lastTargetFillers = targetFillers;
   lastReferenceFillers = referenceFillers;
-  // Freq-LL column is 6 in basic mode, 12 in advanced mode
+  // Freq-LL column is 8 in basic mode, 14 in advanced mode
   const advStats = document.getElementById('keyAdvancedStats')?.checked ?? false;
-  lastSort = { col: advStats ? 12 : 6, dir: 'desc' };
+  lastSort = { col: advStats ? 14 : 8, dir: 'desc' };
   lastKeyFeatureType = featureType;
   lastKeyAllCount = rows.length;
 
@@ -5097,7 +5117,7 @@ function displayDepKeynessResults(rows, topN) {
   updateKeynessTableStructure(advanced);
   
   const displayRows = rows.slice(0, topN);
-  const numCols = advanced ? 17 : 11;
+  const numCols = advanced ? 19 : 13;
   
   let html = '';
   displayRows.forEach((row, idx) => {
@@ -5106,6 +5126,7 @@ function displayDepKeynessResults(rows, topN) {
     html += `<td class="mono">${escapeHtml(row.feature)}</td>`;
     html += `<td class="text-right">${row.freqT.toLocaleString()}</td>`;
     html += `<td class="text-right">${row.normT.toFixed(2)}</td>`;
+    html += `<td class="text-right">${row.filesT || 0}</td>`;
     if (advanced) {
       html += `<td class="text-right">${row.rangeT || 0}</td>`;
       html += `<td class="text-right">${(row.juillandT || 0).toFixed(3)}</td>`;
@@ -5113,6 +5134,7 @@ function displayDepKeynessResults(rows, topN) {
     }
     html += `<td class="text-right">${row.freqR.toLocaleString()}</td>`;
     html += `<td class="text-right">${row.normR.toFixed(2)}</td>`;
+    html += `<td class="text-right">${row.filesR || 0}</td>`;
     if (advanced) {
       html += `<td class="text-right">${row.rangeR || 0}</td>`;
       html += `<td class="text-right">${(row.juillandR || 0).toFixed(3)}</td>`;
@@ -10797,11 +10819,11 @@ function exportKeynessToExcel() {
   const isPframe = lastKeynessIsPframe;
   let headers;
   if (advancedStats) {
-    headers = ['#', 'Feature', 'freq_T', 'norm_T (pm)', 'Range_T', 'Juilland_T', 'DP_T', 
-               'freq_R', 'norm_R (pm)', 'Range_R', 'Juilland_R', 'DP_R',
+    headers = ['#', 'Feature', 'freq_T', 'norm_T (pm)', 'file_T', 'Range_T', 'Juilland_T', 'DP_T', 
+               'freq_R', 'norm_R (pm)', 'file_R', 'Range_R', 'Juilland_R', 'DP_R',
                'Freq-LL', 'Text-LL', "MTK"];
   } else {
-    headers = ['#', 'Feature', 'freq_T', 'norm_T (pm)', 'freq_R', 'norm_R (pm)',
+    headers = ['#', 'Feature', 'freq_T', 'norm_T (pm)', 'file_T', 'freq_R', 'norm_R (pm)', 'file_R',
                'Freq-LL', 'Text-LL', "MTK"];
   }
   if (isPframe) {
@@ -10840,11 +10862,13 @@ function exportKeynessToExcel() {
         r.feature,
         String(r.fT),
         formatNumber(r.normT, 2),
+        String(r.fFileT || 0),
         rangeTStr,
         juillandTStr,
         dpTStr,
         String(r.fR),
         formatNumber(r.normR, 2),
+        String(r.fFileR || 0),
         rangeRStr,
         juillandRStr,
         dpRStr,
@@ -10858,8 +10882,10 @@ function exportKeynessToExcel() {
         r.feature,
         String(r.fT),
         formatNumber(r.normT, 2),
+        String(r.fFileT || 0),
         String(r.fR),
         formatNumber(r.normR, 2),
+        String(r.fFileR || 0),
         freqLLStr,
         textLLStr,
         dStr
@@ -13106,7 +13132,7 @@ async function handleAnalyzeClick() {
       corpus = null;
       renderSummary();
       document.getElementById('keyTableBody').innerHTML =
-        '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+        '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
       document.getElementById('kwicTableBody').innerHTML =
         '<tr><td colspan="6" class="text-xs">No KWIC.</td></tr>';
       document.getElementById('kwicStatus').textContent = '';
@@ -13197,7 +13223,7 @@ refreshFeatureTypeOptions();
   renderSummary();
 
   document.getElementById('keyTableBody').innerHTML =
-    '<tr><td colspan="11" class="text-xs">No keyness results.</td></tr>';
+    '<tr><td colspan="13" class="text-xs">No keyness results.</td></tr>';
   document.getElementById('kwicTableBody').innerHTML =
     '<tr><td colspan="6" class="text-xs">No KWIC.</td></tr>';
   document.getElementById('kwicStatus').textContent = '';
@@ -31241,14 +31267,14 @@ window.addEventListener('DOMContentLoaded', () => {
             keyStatus.style.color = '#c55';
           }
           // Still render in basic mode visually but with advanced header
-          lastSort = { col: 12, dir: 'desc' };
+          lastSort = { col: 14, dir: 'desc' };
           renderKeynessRows();
           return;
         }
         
         // Reset sort column based on new mode
-        // Freq-LL is col 6 in basic, col 12 in advanced
-        lastSort = { col: advStats ? 12 : 6, dir: 'desc' };
+        // Freq-LL is col 8 in basic, col 14 in advanced
+        lastSort = { col: advStats ? 14 : 8, dir: 'desc' };
         const keyStatus = document.getElementById('keyStatus');
         if (keyStatus) keyStatus.style.color = '';
         renderKeynessRows();
@@ -31539,7 +31565,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // 8) Keyness Clear
   document.getElementById('keyClearBtn')?.addEventListener('click', () => {
     allKeynessRows = [];
-    document.getElementById('keyTableBody').innerHTML = '<tr><td colspan="11" class="text-xs">Compute Keyness first.</td></tr>';
+    document.getElementById('keyTableBody').innerHTML = '<tr><td colspan="13" class="text-xs">Compute Keyness first.</td></tr>';
     document.getElementById('keyStatus').textContent = '';
   });
   

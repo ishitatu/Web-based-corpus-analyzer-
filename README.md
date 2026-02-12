@@ -253,7 +253,7 @@ For p-frame features (e.g., `in the *`):
 | Feature | The linguistic feature (click for KWIC) |
 | freq_T / freq_R | Raw frequency |
 | norm_T / norm_R | Normalized frequency (per million) |
-| file_T / file_R | file frequency |
+| file_T / file_R | File frequency |
 | Freq-LL (T) | Frequency-based log-likelihood |
 | Text-LL (T) | Text-based log-likelihood |
 | MTK (T) | Mean Text Keyness |

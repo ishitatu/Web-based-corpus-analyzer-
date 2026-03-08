@@ -133,7 +133,7 @@ Visualize the distribution of search terms across your corpus:
 
 ---
 
-## 🔗 Section 6: Collocate Tables (Target vs Reference)
+## 🔗 Section 6: Collocation Tables (Target vs Reference)
 
 Extract and compare collocations between Target and Reference corpora.
 

@@ -159,6 +159,57 @@
       border: 1px solid #e5e7eb;
       background: #ffffff;
     }
+    #corpusSummaryTable {
+      table-layout: fixed;
+      border-collapse: collapse;
+      min-width: 100%;
+    }
+    #corpusSummaryTable th,
+    #corpusSummaryTable td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #e5e7eb;
+    }
+    #corpusSummaryTable th {
+      position: relative;
+      background: #f3f4f6;
+      user-select: none;
+    }
+    .generic-col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 100%;
+      cursor: col-resize;
+      background: transparent;
+    }
+    .generic-col-resizer:hover {
+      background: #3b82f6;
+    }
+    #folderSelectionTable {
+      table-layout: fixed;
+      border-collapse: collapse;
+      min-width: 100%;
+    }
+    #folderSelectionTable th,
+    #folderSelectionTable td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #e5e7eb;
+    }
+    #folderSelectionTable th {
+      position: relative;
+      background: #f3f4f6;
+      user-select: none;
+    }
+    #folderSelectionArea {
+      overflow-x: auto;
+    }
     .flex {
       display: flex;
       align-items: center;
@@ -772,6 +823,12 @@
     </div>
     <div class="table-wrapper mt-1">
       <table id="corpusSummaryTable">
+        <colgroup>
+          <col style="width:40px;">
+          <col style="width:180px;">
+          <col style="width:250px;">
+          <col style="width:90px;">
+        </colgroup>
         <thead>
         <tr>
           <th>#</th>
@@ -2862,12 +2919,13 @@ function sortCorpusSummary(key) {
   sorted.forEach((f, idx) => {
     rows += `<tr>
       <td>${idx + 1}</td>
-      <td>${escapeHtml(f.folder)}</td>
-      <td>${escapeHtml(f.name)}</td>
+      <td title="${escapeHtml(f.folder)}">${escapeHtml(f.folder)}</td>
+      <td title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</td>
       <td class="text-right">${f.tokenCount}</td>
     </tr>`;
   });
   fileBody.innerHTML = rows;
+  makeTableResizable(document.getElementById('corpusSummaryTable'));
 }
 
 // ===== Summary Rendering =====
@@ -2916,8 +2974,8 @@ function renderSummary() {
   corpusSummaryData.forEach((f, idx) => {
     rows += `<tr>
       <td>${idx + 1}</td>
-      <td>${escapeHtml(f.folder)}</td>
-      <td>${escapeHtml(f.name)}</td>
+      <td title="${escapeHtml(f.folder)}">${escapeHtml(f.folder)}</td>
+      <td title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</td>
       <td class="text-right">${f.tokenCount}</td>
     </tr>`;
   });
@@ -2947,6 +3005,9 @@ function renderSummary() {
   
   // Initialize 12) Constituent UI
   try { initConstituentUI(); } catch(e) {}
+
+  // Enable column resizing on corpus summary table
+  makeTableResizable(document.getElementById('corpusSummaryTable'));
 }
 
 function renderFolderSelection() {
@@ -2964,7 +3025,24 @@ function renderFolderSelection() {
 
   const isTagged = corpus.mode === 'tagged' || corpus.mode === 'csv';
 
-  let html = `<table style="width:100%; border-collapse:collapse;">
+  let html = `<table id="folderSelectionTable">
+    <colgroup>
+      <col style="width:170px;">
+      <col style="width:70px;">
+      <col style="width:80px;">
+      <col style="width:58px;">
+      <col style="width:85px;">
+      <col style="width:92px;">
+      <col style="width:92px;">
+      <col style="width:108px;">
+      <col style="width:105px;">
+      <col style="width:82px;">
+      <col style="width:72px;">
+      <col style="width:65px;">${isTagged ? `
+      <col style="width:105px;">
+      <col style="width:95px;">
+      <col style="width:88px;">` : ''}
+    </colgroup>
     <thead>
       <tr>
         <th>Folder</th>
@@ -3086,7 +3164,7 @@ function renderFolderSelection() {
 
     html += `
       <tr>
-        <td>${escapeHtml(folder)}</td>
+        <td title="${escapeHtml(folder)}">${escapeHtml(folder)}</td>
         <td class="text-center">
           <input type="checkbox" class="targetCheck" data-folder="${escapeHtml(folder)}" ${checkedT}>
         </td>
@@ -3185,6 +3263,8 @@ function renderFolderSelection() {
   if (exportBtn) {
     exportBtn.addEventListener('click', exportFolderSummary);
   }
+
+  makeTableResizable(document.getElementById('folderSelectionTable'));
 }
 
 // ===== Feature Counting =====
@@ -5300,6 +5380,44 @@ function initHfTableResize() {
       const colStyle = window.getComputedStyle(col);
       const width = parseFloat(colStyle.width);
       startWidth = isNaN(width) ? resizer.parentElement.offsetWidth : width;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  });
+}
+
+// Generic column resize for any table with a colgroup
+function makeTableResizable(table) {
+  if (!table) return;
+  const cols = table.querySelectorAll('colgroup col');
+  const headers = table.querySelectorAll('thead th');
+  if (!cols.length || !headers.length) return;
+
+  headers.forEach((th, index) => {
+    const existing = th.querySelector('.generic-col-resizer');
+    if (existing) existing.remove();
+
+    const resizer = document.createElement('div');
+    resizer.className = 'generic-col-resizer';
+    th.appendChild(resizer);
+
+    let startX = 0, startWidth = 0;
+
+    const onMouseMove = (e) => {
+      const dx = e.pageX - startX;
+      const newWidth = Math.max(40, startWidth + dx);
+      if (cols[index]) cols[index].style.width = newWidth + 'px';
+    };
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    resizer.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      startX = e.pageX;
+      const col = cols[index];
+      startWidth = col ? parseFloat(col.style.width) || th.offsetWidth : th.offsetWidth;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     });
